@@ -1,0 +1,51 @@
+#SERVER JS CODE
+
+- Import: express, http, socket.io, chess.js
+
+- Create Express app instance
+- Initialize HTTP Server with Express
+- Instantiate Socket.io on HTTP Server
+
+- Create Chess object instance (chess.js)
+
+- Initialize:
+        - Players object: track socket IDs, roles (white/black)
+        - CurrentPlayer: track CurrentP turn
+
+- Configure Express app: 
+       - Use EJS templating engine 
+       - Server static files from 'public' directory
+
+       - Define route for root URL
+       - Render EJS template "index"
+       - Title: "Custom Chess Game"
+
+       - Socket.io handles connection event
+       - Callback executed on Client connection
+       - Server assigns role based on availbility:
+              - If slots empty:
+                  -Assign role (white/black) 
+                  - Inform player
+             - If slots full:
+                  - Designate as spectator
+ - Client connection:             
+                  -Assign role based on game state:
+                    - If no white player, assign white role
+                    - If no black player, assign black role
+                    - Emit " playerRole " event with assigned role
+                    - If both slots filled, designate as spectator
+                    - Emit "spectatorRole" event
+        - Send initial board state using FEN notation
+
+- Client disconnection: 
+     -Remove assigned role from Players object
+-Listen for "move" events: 
+    -Validate correct player's turn
+    - If Valid: - Update game state
+                - Broadcast move via "move" event
+                - Send updated board state via "boardState" event
+
+-If invalid: -Log error message
+- Ensure smooth gameplay and real- time updates for all connected
+
+        
